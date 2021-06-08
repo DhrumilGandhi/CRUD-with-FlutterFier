@@ -56,9 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
               RaisedButton(
                 onPressed: () {
                   if (isUpdate) {
-                    db.collection('task').doc(ds?.id).update({'task': task});
+                    db
+                        .collection('task')
+                        .doc(ds?.id)
+                        .update({'task': task, 'time': DateTime.now()});
                   } else {
-                    db.collection('task').add({'task': task});
+                    db
+                        .collection('task')
+                        .add({'task': task, 'time': DateTime.now()});
                   }
                   Navigator.pop(context);
                 },
@@ -82,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: true,
           ),
           body: StreamBuilder<QuerySnapshot>(
-            stream: db.collection('task').snapshots(),
+            stream: db.collection('task').orderBy('time').snapshots(),
             builder: (context, snapshots) {
               if (snapshots.hasData) {
                 return ListView.builder(
